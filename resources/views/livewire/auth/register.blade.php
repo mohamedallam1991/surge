@@ -1,25 +1,23 @@
-@extends('layouts.app')
 
-@section('content')
     <div>
 
 
-
-        <form action="/register" method="POST">
+        <form wire:submit.prevent="register">
+        {{ $email }}
 
         <div>
             <label for="email">Email</label>
-            <input type="text" id="email" name="email">
+            <input wire:model="email" type="text" id="email" name="email">
         </div>
 
         <div>
             <label for="password">Password </label>
-            <input type="text" id="password" name="password">
+            <input wire:model="password" type="password" id="password" name="password">
         </div>
 
         <div>
             <label for="passwordConfirmation">Password Confirmation</label>
-            <input type="text" id="passwordConfirmation" name="passwordConfirmation">
+            <input wire:model="passwordConfirmation" type="password" id="passwordConfirmation" name="passwordConfirmation">
         </div>
 
         <div>
@@ -31,4 +29,3 @@
 
 
     </div>
-@endsection
