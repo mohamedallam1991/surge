@@ -14,7 +14,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return 'success';
+    //return view('welcome');
 });
 
 //Route::get('/register', \App\Http\Livewire\Auth\Register::class);
