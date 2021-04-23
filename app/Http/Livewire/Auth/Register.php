@@ -17,13 +17,13 @@ class Register extends Component
             'email' => 'required|email|unique:users',
             'password' => 'required|min:6|same:passwordConfirmation',
         ]);
-        User::create([
+        $user = User::create([
             'name' => $this->email,
             'email' => $this->email,
             'password' => bcrypt($this->password),
         ]);
-
-        return redirect('/ ');
+        auth()->login($user);
+        return redirect('/');
     }
 
     public function render()
