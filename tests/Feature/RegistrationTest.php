@@ -92,4 +92,61 @@ class RegistrationTest extends TestCase
             $this->assertEquals(User::whereEmail('caleb@gmail.com')->count(), 1);
             $this->assertNull(auth()->user());
     }
+
+    /** @test */
+    public function password_has_is_required()
+    {
+        $this->assertFalse(User::whereEmail('caleb@gmail.com')->exists());
+
+        Livewire::test('auth.register')
+            ->set('email', 'caleb@gmail.com')
+            ->set('password', '')
+            ->set('passwordConfirmation', 'secret')
+            ->call('register')
+            ->assertHasErrors(['password' => 'required']);
+
+
+            $this->assertFalse(User::whereEmail('caleb@gmail.com')->exists());
+            $this->assertNull(auth()->user());
+
+    }
+
+    /** @test */
+    public function password_is_at_least_6_charachters()
+    {
+        $this->assertFalse(User::whereEmail('caleb@gmail.com')->exists());
+
+        Livewire::test('auth.register')
+            ->set('email', 'caleb@gmail.com')
+            ->set('password', 'secre')
+            ->set('passwordConfirmation', 'secre')
+            ->call('register')
+            ->assertHasErrors(['password' => 'min']);
+
+
+            $this->assertFalse(User::whereEmail('caleb@gmail.com')->exists());
+            $this->assertNull(auth()->user());
+    }
+
+        /** @test */
+        public function password_is_the_same_as_Confirmation_password()
+        {
+            $this->assertFalse(User::whereEmail('caleb@gmail.com')->exists());
+
+            Livewire::test('auth.register')
+                ->set('email', 'caleb@gmail.com')
+                ->set('password', 'secret')
+                ->set('passwordConfirmation', 'no-secret')
+                ->call('register')
+                ->assertHasErrors(['password' => 'same']);
+
+
+                $this->assertFalse(User::whereEmail('caleb@gmail.com')->exists());
+                $this->assertNull(auth()->user());
+        }
+
+
+
+
+
 }
