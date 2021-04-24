@@ -11,9 +11,14 @@ class Register extends Component
     public $password = '';
     public $passwordConfirmation = '';
 
+    public function updatedEmail()
+    {
+        return $this->validate(['email' => 'unique:users']);
+    }
+
     public function register()
     {
-        $data = $this->validate([
+        $this->validate([
             'email' => 'required|email|unique:users',
             'password' => 'required|min:6|same:passwordConfirmation',
         ]);

@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use Tests\TestCase;
 use App\Models\User;
+use Carbon\Traits\Creator;
 use Livewire\Livewire;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -152,7 +153,45 @@ class RegistrationTest extends TestCase
     }
 
 
+    // testing real time
+    /** @test */
+    public function email_has_to_be_unique_realtime()
+    {
+        $this->assertFalse(User::whereEmail('caleb@gmail.com')->exists());
 
+        User::create([
+            'email' => 'caleb@gmail.com',
+            'name' => 'caleb@gmail.com',
+            'password' => bcrypt('secret'),
+        ]);
+
+        // Livewire::test('auth.register')
+        //     ->set('email', 'caleb@gmail.com')
+        //     ->set('password', 'secret')
+        //     ->set('passwordConfirmation', 'secret')
+        //     ->call('register')
+        //     ->assertOk()
+        //     ->assertRedirect('/');
+
+        $this->assertTrue(User::whereEmail('caleb@gmail.com')->exists());
+        //$this->assertEquals('caleb@gmail.com', auth()->user()->email );
+
+        //auth()->logout();
+
+        Livewire::test('auth.register')
+            ->set('email','caleb@gmail.com')
+            ->assertHasErrors(['email' => 'unique'])
+            ->set('email', 'calebi@gmail.com')
+            ->assertHasNoErrors()
+            ->set('email','caleb@gmail.com')
+            ->assertHasErrors(['email' => 'unique']);
+
+
+
+
+        // $this->assertEquals(User::whereEmail('caleb@gmail.com')->count(), 1);
+        // $this->assertNull(auth()->user());
+    }
 
 
 }
