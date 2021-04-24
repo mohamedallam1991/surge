@@ -13,6 +13,12 @@ class RegistrationTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
+    public function test_registeration_page_contains_livewire_component()
+    {
+        return $this->get('/register')->assertSeeLivewire('auth.register');
+    }
+
+    /** @test */
     public function can_register()
     {
         $this->assertFalse(User::whereEmail('caleb@gmail.com')->exists());
@@ -42,8 +48,8 @@ class RegistrationTest extends TestCase
             ->assertHasErrors(['email' => 'required']);
 
 
-            $this->assertFalse(User::whereEmail('caleb@gmail.com')->exists());
-            $this->assertNull(auth()->user());
+        $this->assertFalse(User::whereEmail('caleb@gmail.com')->exists());
+        $this->assertNull(auth()->user());
     }
 
     /** @test */
@@ -59,8 +65,8 @@ class RegistrationTest extends TestCase
             ->assertHasErrors(['email' => 'email']);
 
 
-            $this->assertFalse(User::whereEmail('caleb@gmail.com')->exists());
-            $this->assertNull(auth()->user());
+        $this->assertFalse(User::whereEmail('caleb@gmail.com')->exists());
+        $this->assertNull(auth()->user());
     }
 
     /** @test */
@@ -76,10 +82,10 @@ class RegistrationTest extends TestCase
             ->assertOk()
             ->assertRedirect('/');
 
-            $this->assertTrue(User::whereEmail('caleb@gmail.com')->exists());
-            $this->assertEquals('caleb@gmail.com', auth()->user()->email );
+        $this->assertTrue(User::whereEmail('caleb@gmail.com')->exists());
+        $this->assertEquals('caleb@gmail.com', auth()->user()->email );
 
-            auth()->logout();
+        auth()->logout();
 
         Livewire::test('auth.register')
             ->set('email', 'caleb@gmail.com')
@@ -89,8 +95,8 @@ class RegistrationTest extends TestCase
             ->assertHasErrors(['email' => 'unique']);
 
 
-            $this->assertEquals(User::whereEmail('caleb@gmail.com')->count(), 1);
-            $this->assertNull(auth()->user());
+        $this->assertEquals(User::whereEmail('caleb@gmail.com')->count(), 1);
+        $this->assertNull(auth()->user());
     }
 
     /** @test */
@@ -106,8 +112,8 @@ class RegistrationTest extends TestCase
             ->assertHasErrors(['password' => 'required']);
 
 
-            $this->assertFalse(User::whereEmail('caleb@gmail.com')->exists());
-            $this->assertNull(auth()->user());
+        $this->assertFalse(User::whereEmail('caleb@gmail.com')->exists());
+        $this->assertNull(auth()->user());
 
     }
 
@@ -124,26 +130,26 @@ class RegistrationTest extends TestCase
             ->assertHasErrors(['password' => 'min']);
 
 
-            $this->assertFalse(User::whereEmail('caleb@gmail.com')->exists());
-            $this->assertNull(auth()->user());
+        $this->assertFalse(User::whereEmail('caleb@gmail.com')->exists());
+        $this->assertNull(auth()->user());
     }
 
-        /** @test */
-        public function password_is_the_same_as_Confirmation_password()
-        {
-            $this->assertFalse(User::whereEmail('caleb@gmail.com')->exists());
+    /** @test */
+    public function password_is_the_same_as_Confirmation_password()
+    {
+        $this->assertFalse(User::whereEmail('caleb@gmail.com')->exists());
 
-            Livewire::test('auth.register')
-                ->set('email', 'caleb@gmail.com')
-                ->set('password', 'secret')
-                ->set('passwordConfirmation', 'no-secret')
-                ->call('register')
-                ->assertHasErrors(['password' => 'same']);
+        Livewire::test('auth.register')
+            ->set('email', 'caleb@gmail.com')
+            ->set('password', 'secret')
+            ->set('passwordConfirmation', 'no-secret')
+            ->call('register')
+            ->assertHasErrors(['password' => 'same']);
 
 
-                $this->assertFalse(User::whereEmail('caleb@gmail.com')->exists());
-                $this->assertNull(auth()->user());
-        }
+        $this->assertFalse(User::whereEmail('caleb@gmail.com')->exists());
+        $this->assertNull(auth()->user());
+    }
 
 
 
