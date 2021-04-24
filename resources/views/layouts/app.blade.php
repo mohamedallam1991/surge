@@ -1,18 +1,9 @@
-<html>
+@extends('layouts.base')
 
-
-@livewireStyles
-<head>
-
-</head>
-
-
-<body>
-@yield('content')
-
-
-@livewireScripts
-</body>
-
-
-</html>
+@section('body')
+    @yield('content')
+    
+    @isset($slot)
+        {{ $slot }}
+    @endisset
+@endsection
